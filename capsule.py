@@ -47,33 +47,18 @@ class Attack(Capsule):
         self.description = 'the least you can do.'
         self.d_target = 'other'
         self.icon_path = None
-    def use(self, target, ease=False):
+    def use(self, target):
         """attack a target / ease the pain."""
         log.write(f'{self.owner} attacks')
-        # attack success.
-        S = 0; T = 0
-        while S == T:
-            S = self.owner.roll(s=self.owner.sides, n=2)[1] + self.owner.agility
-            T = target.roll(s=target.sides)[1] + target.agility
-            if S == T: log.write('** deuce **')
-        success = S > T
 
-        if not success: log.write(f'{self.owner} miss ({S}<{T})')
-        else: log.write(f'{self.owner} success! ({S}>{T})')
+        # will attack succeed?
+        success = self.owner.success(target)
+        if not success: log.write(f'{self.owner} misses')
+        else: log.write(f'{self.owner} succeed!')
         if not success: hit = F_MISS
-
-        if ease and success:
-            # ease the pain attack
-            log.write(f'{self.owner} release the pain!')
-            _, pain = self.owner.roll(self.owner.sides, self.owner.strength)
-            hit = pain * self.owner.p_pain // 100
-            self.owner.pain = 0
-            self.owner.p_pain = 0
-            self.owner.heal()
-        elif success:
+        else:
             # normal attack
             _, hit = self.owner.roll(self.owner.sides, self.owner.strength)
-            log.write(f'{self.owner} normal attack')
 
         for result in self.owner.capsule_trigger('attack', hit):
             if result not in (F_NOCS, F_NOFX): hit = result
@@ -81,8 +66,39 @@ class Attack(Capsule):
             if self.owner.hp == 0: return F_DEAD
         if success: target.hurt(attacker=self.owner, hit=hit)
         return hit
-    def release(self, target):
-        return self.use(target, ease=True)
+
+class Relieve(Capsule):
+    """special attack"""
+    def __init__(self, owner):
+        Capsule.__init__(self, owner)
+        self.name = 'relieve'
+        self.description = 'relieve the pain'
+        self.d_target = 'other'
+        self.active = False
+    def use(self, target):
+        """special attack"""
+        log.write(f'{self.owner} relieves the pain!')
+
+        #will attack succeed?
+        success = self.owner.success(target)
+        if not success: log.write(f'{self.owner} misses')
+        else: log.write(f'{self.owner} succeed!')
+        if not success: hit = F_MISS
+        if success:
+            #relieve the pain
+            _, pain = self.owner.roll(self.owner.sides, self.owner.strength)
+            hit = pain * self.owner.p_pain // 100
+            self.owner.pain = 0
+            self.owner.p_pain = 0
+            self.owner.heal()
+            self.active = False
+
+        for result in self.owner.capsule_trigger('attack', hit):
+            if result not in (F_NOCS, F_NOFX): hit = result
+            if self.owner.hp == 0: return F_DEAD
+        if success: target.hurt(attacker=self.owner, hit=hit)
+        return hit
+
 
 class Shield(Capsule):
     """basic shield."""
@@ -473,6 +489,7 @@ capsules_dict = {
         #name         #object
         'attack':     Attack,
         'shield':     Shield,
+        'relieve':    Relieve,
         'poison':     Poison,
         'wall':       Wall,
         'mirror':     Mirror,

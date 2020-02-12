@@ -5,7 +5,7 @@ import random
 from time import sleep
 import sys
 from common import  *
-from objects import *
+from character import *
 from capsule import *
 
 def choose(text, *choices, default=0):
@@ -74,16 +74,15 @@ class Enemy(Character):
         self.damage_taken = 0
         self.damage_done = 0
         self.detach_all_capsules()
-        self.drop_all_capsules(but=('attack', 'shield', 'timebomb'))
+        self.drop_all_capsules(but=('attack', 'shield', 'relieve', 'timebomb'))
 
 class Boss(Enemy):
     pass
 
 player = Character(name='PLAYER', hp=100, strength=2, agility=2)
 enemy = Enemy(name='ENEMY', hp=0, level=1, strength=0, defense=0)
-player.add_capsule('attack', 'shield')
-enemy.add_capsule('attack', 'shield')
-#enemy.add_capsule(Kamikaze(enemy))
+player.add_capsule('attack', 'shield', 'relieve')
+enemy.add_capsule('attack', 'shield', 'relieve')
 
 print('\x1b[2J\x1b[H')
 print(f'-- PAINKILLER (dev) -- {SEED}')
@@ -94,7 +93,7 @@ except (KeyboardInterrupt, EOFError):
 
 fight = 1
 
-capsules = [c for c in capsules_dict.keys() if c not in ('attack', 'shield')]
+capsules = [c for c in capsules_dict.keys() if c not in ('attack', 'shield', 'relieve')]
 
 while player.hp > 0:
     turn = 1
@@ -107,8 +106,8 @@ while player.hp > 0:
     print(f'** you got a capsule → {capsule}: {capsdesc} **')
     sleep(3)
     enemy.upgrade()
-    enemy.activate_capsules()
-    player.activate_capsules()
+    enemy.activate_capsules(but=('relieve',))
+    player.activate_capsules(but=('relieve',))
     player.shield = 0
     try:
         toggle = random.randint(0, 1)
@@ -144,7 +143,7 @@ while player.hp > 0:
                 if d_target == 'self': target = player
                 else: target = enemy
                 result = player.use_capsule(capsname, target)
-                print(f'{player} use {capsname}!')
+                print(f'{player} uses {capsname}!')
                 if capsname == 'attack':
                     if result == F_MISS:
                         print(f'{player} miss...')
@@ -169,10 +168,10 @@ while player.hp > 0:
                 if capsname is None:
                     print(f'{enemy.name} cannot move!')
                 else:
-                    print(f'{enemy.name} use {capsname}')
+                    print(f'{enemy.name} uses {capsname}')
                     if capsname == 'attack':
                         if result == F_MISS:
-                            print(f'{enemy.name} MISS...')
+                            print(f'{enemy.name} misses...')
                         else:
                             print(f'{enemy.name} does {result} damage!')
                     elif capsname == 'shield':
