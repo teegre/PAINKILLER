@@ -38,19 +38,13 @@ def choose(text, *choices, default=0):
 
 class Enemy(Character):
     def action(self, target):
-        # too difficult
-        #if self.is_in_pain:
-        #    # if a pain attack can kill the opponent, give it a try!
-        #    pain = self.sides * self.strength
-        #    hit = pain * self.p_pain // 100
-        #    if hit >= player.hp:
-        #        action = self.get_capsule('attack')
-        #        result = action.release(player)
-        #        return 'release', result
-
         if self.actions == F_NOCS:
             log.write(f'{self} cannot move')
             return None, F_NOCS
+
+        if self.is_in_pain and self.can_kill(player):
+            result = self.use_capsule('relieve', player)
+            return 'relieve', result
 
         actions, _ = self.actions
         idx = randint(0, len(actions) - 1)
@@ -75,6 +69,7 @@ class Enemy(Character):
         self.damage_done = 0
         self.detach_all_capsules()
         self.drop_all_capsules(but=('attack', 'shield', 'relieve', 'timebomb'))
+        self.deactivate_capsule('relieve')
 
 class Boss(Enemy):
     pass
@@ -93,7 +88,7 @@ except (KeyboardInterrupt, EOFError):
 
 fight = 1
 
-capsules = [c for c in capsules_dict.keys() if c not in ('attack', 'shield', 'relieve')]
+capsules = [c for c in capsules_dict.keys() if c not in ('attack', 'shield', 'relieve', 'pass')]
 
 while player.hp > 0:
     turn = 1

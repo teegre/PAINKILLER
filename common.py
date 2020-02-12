@@ -28,7 +28,7 @@ def seed_gen(s=None):
     return s
 
 SEED = seed_gen()
-#SEED = seed_gen('ULBT-BTUJ')
+#SEED = seed_gen('W85N-B7RJ')
 log = Log(SEED, add_timestamp=False)
 log.clear()
 log.write(f'SEED: {SEED}')

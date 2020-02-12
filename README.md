@@ -19,7 +19,7 @@ De plus, il obtient une *capsule* aléatoire à chaque début de combat (voir pl
 Le joueur dispose au départ des *capsules* *attaque* et *bouclier* et d'une *capsule* aléatoire (cf. 2.).  
 Les combattants n'ont droit qu'à une seule action par tour.
 Chaque fois que des dégats sont reçus par l'un ou l'autre des protagonistes, leur jauge de *douleur* se remplit.  
-Lorsque le niveau de *douleur* atteint les 100%, il est possible de la *libérer* et ainsi de la remettre à zéro.  
+Lorsque le niveau de *douleur* atteint les 100%, il est possible de la *libérer* en effectuant un attaque devastatrice et ainsi de la remettre à zéro.  
 Cette attaque permet également de récupérer 10% de ses PV max (auto-guérison).    
 Mais attention ! La déclencher peut faire augmenter drastiquement la jauge de *douleur* de l'adversaire, **la *douleur* pouvant être accumulée bien au-delà de 100%**.  
 A utiliser avec précaution donc...
@@ -37,6 +37,7 @@ A utiliser avec précaution donc...
 Tous les 5 combats gagnés, le joueur gagne un niveau supplémentaire :
 
 - Soin
+- Douleur remise à 0
 - PV max +25
 - attaque +1 dé
 - défense +1 dé

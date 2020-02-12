@@ -24,8 +24,21 @@ class Capsule():
         if not self.target: raise Exception(f'{self}: no specified target')
         if self in self.target.active_c:
             self.target.detach_capsule(self)
+    def activate(self):
+        self.active = True
+        self.on_activate()
+        return 0
+    def deactivate(self):
+        self.on_deactivate()
+        self.active = False
+        return 0
+    def on_activate(self):
+        pass
+    def on_deactivate(self):
+        pass
     def effect(self, action=None, *args):
         """triggered in Character class' action methods: attack, block and hurt."""
+        self.owner.capsule_trigger(action, *args)
         return F_NOFX
     def upgrade(self):
         """upgrade capsule."""
@@ -91,12 +104,12 @@ class Relieve(Capsule):
             self.owner.pain = 0
             self.owner.p_pain = 0
             self.owner.heal()
-            self.active = False
 
         for result in self.owner.capsule_trigger('attack', hit):
             if result not in (F_NOCS, F_NOFX): hit = result
             if self.owner.hp == 0: return F_DEAD
         if success: target.hurt(attacker=self.owner, hit=hit)
+        self.active = False
         return hit
 
 
@@ -444,11 +457,11 @@ class Shell(Capsule):
     def use(self, target):
         self.target = self.owner
         log.write(f'{self.owner}→{self.target}: {self.owner} use {self}')
-        self.owner.add_capsule(Pass(self.owner))
+        self.owner.add_capsule('pass')
         self.attach()
         self.active = False
         return F_NOFX
-    def effect(self, action, attacker=None, hit=0):
+    def effect(self, action, *args):
         if action == 'hurt':
             log.write(f'{self.owner} is indestructible!')
             return F_MISS
@@ -457,6 +470,9 @@ class Shell(Capsule):
             self.owner.drop_capsule('pass')
             self.active = True
             return F_NOFX
+    def on_deactivate(self):
+        self.owner.drop_capsule('pass')
+        return 0
 
 class Pass(Capsule):
     """does nothing."""
@@ -482,8 +498,8 @@ class Morphine(Capsule):
         self.attach()
         self.active = False
         return F_NOFX
-    def effect(self, action, *args):
-        if action == 'hurt':
+    def effect(self, action, attacker=None, hit=0):
+        if action == 'hurt' and hit > 0:
             log.write(f'{self.target} doesn\'t feel the pain.')
             self.detach()
             self.active = True
@@ -524,6 +540,7 @@ capsules_dict = {
         'charity':    Charity,
         'paralysis':  Paralysis,
         'shell':      Shell,
+        'pass':       Pass,
         'morphine':   Morphine,
         'sacrifice':  Sacrifice,
 }
