@@ -1,18 +1,18 @@
-#PAINKILLER 101
+# PAINKILLER 101
 
-##Description
+## Description
 **PAINKILLER 101** est un jeu de combat au tour par tour dont tous les aspects sont gérés par des dés.  
 Le but du jeu est de vaincre **Nemesis**, un boss surpuissant qui n'existe pas encore (lol).
 
-##1. Combats
+## 1. Combats
 
-###1.1 Préambule
+### 1.1 Préambule
 
 Le **joueur** débute l'aventure avec **deux dés 6** qui détermineront la valeur des **attaques** portées à l'adversaire, et **un dé 6** pour la **défense**.  
 Ses **PV** sont au nombre de **100**, son **agilité** *(caractéristique utilisée pour déterminer le succès d'une attaque)* est de **2** et sa **faculté d'auto-guérison** est de **10% des PV max**.  
 De plus, il obtient une *capsule* aléatoire à chaque début de combat (voir plus bas).
 
-###1.2 Déroulement
+### 1.2 Déroulement
 
 ***Avertissement**: la décision de qui débute le combat est prise aléatoirement ! (1 chance sur 2)*
 
@@ -24,7 +24,7 @@ Cette attaque permet également de récupérer 10% de ses PV max (auto-guérison
 Mais attention ! La déclencher peut faire augmenter drastiquement la jauge de *douleur* de l'adversaire, **la *douleur* pouvant être accumulée bien au-delà de 100%**.  
 A utiliser avec précaution donc...
 
-###1.3 Fin du combat
+### 1.3 Fin du combat
 
 À chaque victoire remportée, le joueur peut choisir de :
 
@@ -46,7 +46,7 @@ Tous les 5 combats gagnés, le joueur gagne un niveau supplémentaire :
 - +1 dé pour la capsule *poison* si elle est en sa possession
 
 
-##2. Capsules
+## 2. Capsules
 
 Une capsule est un objet qui octroie des capacités supplémentaires.  
 En voici une liste exhaustive :
@@ -71,7 +71,7 @@ En voici une liste exhaustive :
 - **Carapace** → le joueur est invincible tant qu'il n'attaque pas (octroie l'ajout d'une capsule supplémentaire **Passe**).
 - **Passe** → le joueur peut passer son tour (action contenue dans la capsule **Carapace**, ne peut être vendue séparément). OK
 
-###3 Statistiques et valeurs par défaut
+### 3 Statistiques et valeurs par défaut
 
 |Caractéristique | Valeur
 |:---------------|:------
@@ -81,6 +81,6 @@ En voici une liste exhaustive :
 |Auto-guérison   |10% des PV max
 
 
-##Zones intermédiaires
+## Zones intermédiaires
 ???
 
