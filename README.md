@@ -52,6 +52,7 @@ Une capsule est un objet qui octroie des capacités supplémentaires.
 En voici une liste exhaustive :
 
 - **Attaque** → attaque normale. OK
+- **Libérer** → attaque spéciale. OK
 - **Bouclier** → défense. OK
 - **Poison** → inflige des dégats qui équivalent au résultat du lancé d'un dé (le nombre de faces est déterminé par le niveau du joueur). A chaque tour la valeur diminue de 1. (cumulable et améliorable) OK
 - **Calmant** → apaise la douleur de l'adversaire (1 fois par combat). OK

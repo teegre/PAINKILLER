@@ -2,7 +2,7 @@ from common import *
 from log import Log
 
 class Capsule():
-    """Base class for capsule"""
+    """base class for capsule."""
     def __init__(self, owner):
         self.name = 'capsule'
         self.description = 'empty capsule.'
@@ -164,7 +164,7 @@ class Poison(Capsule):
         else: return self.name
 
 class Wall(Capsule):
-    """Totally block incoming damage."""
+    """totally block incoming damage."""
     def __init__(self, owner):
         Capsule.__init__(self, owner)
         self.name = 'wall'
@@ -185,6 +185,7 @@ class Wall(Capsule):
         else: return F_NOFX
 
 class Mirror(Capsule):
+    """return attack to sender."""
     def __init__(self, owner):
         Capsule.__init__(self, owner)
         self.name = 'mirror'
@@ -205,6 +206,7 @@ class Mirror(Capsule):
         else: return F_NOFX
 
 class Fury(Capsule):
+    """increase pain"""
     def __init__(self, owner):
         Capsule.__init__(self, owner)
         self.name = 'fury'
@@ -228,6 +230,7 @@ class Fury(Capsule):
         else: return -3
 
 class Wreckage(Capsule):
+    """break opponent's shield and perform normal attack"""
     def __init__(self, owner):
         Capsule.__init__(self, owner)
         self.name = 'wreckage'
@@ -240,6 +243,7 @@ class Wreckage(Capsule):
         return self.owner.use_capsule('attack', target)
 
 class PainKiller(Capsule):
+    """reduce opponent's pain to zero"""
     def __init__(self, owner):
         Capsule.__init__(self, owner)
         self.name = 'painkiller'
@@ -256,6 +260,7 @@ class PainKiller(Capsule):
         return F_NOFX
 
 class Empathy(Capsule):
+    """pain increase also when attacking the enemy"""
     def __init__(self, owner):
         Capsule.__init__(self, owner)
         self.name = 'empathy'
@@ -275,6 +280,10 @@ class Empathy(Capsule):
         return F_NOFX
 
 class Embrace(Capsule):
+    """
+    user is fully healed and opponent heals according to its self-healing ability.
+    shield and pain are resetted for both characters.
+    """
     def __init__(self, owner):
         Capsule.__init__(self, owner)
         self.name = 'embrace'
@@ -285,7 +294,7 @@ class Embrace(Capsule):
         target.pain = 0
         target.p_pain = 0
         target.shield = 0
-        log.write(f'{target} feels no pain...')
+        log.write(f'{target} pain is relieved...')
         target.heal()
         self.owner.pain = 0
         self.owner.p_pain = 0
@@ -296,7 +305,7 @@ class Embrace(Capsule):
         return 0
 
 class Berserk(Capsule):
-    """owner damage is doubled. no pain."""
+    """character damage is doubled. no pain."""
     def __init__(self, owner):
         Capsule.__init__(self, owner)
         self.name = 'berserk'
@@ -318,7 +327,10 @@ class Berserk(Capsule):
         else: return F_NOFX
 
 class Timebomb(Capsule):
-    """for enemies..."""
+    """
+    when countdown reaches zero, sacrifices all remaining hp in a desperate last attack.
+    (for enemies only)
+    """
     def __init__(self, owner):
         Capsule.__init__(self, owner)
         self.name = 'timebomb'
@@ -350,7 +362,7 @@ class Timebomb(Capsule):
         else: return self.name
 
 class Leech(Capsule):
-    """drain life of the opponent"""
+    """opponent's hp are drained when performing an attack. reduce pain"""
     def __init__(self, owner):
         Capsule.__init__(self, owner)
         self.name = 'leech'
@@ -378,14 +390,18 @@ class Leech(Capsule):
         else: return F_NOFX
 
 class Charity(Capsule):
+    """
+    give the equivalent of self-healing% hp to the opponent
+    reset his pain and shield
+    """
     def __init__(self, owner):
         Capsule.__init__(self, owner)
         self.name = 'charity'
         self.description = 'be nice!'
-        self.d_target = 'other'
+        self.d_target = 'self'
     def use(self, target):
         heal = self.owner.maxhp * self.owner.self_healing // 100
-        self.owner.hurt(target, heal)
+        self.owner.hurt(self.owner, heal)
         target.heal(heal)
         target.pain = target.p_pain = 0
         target.shield = 0
@@ -393,6 +409,7 @@ class Charity(Capsule):
         return F_NOFX
 
 class Paralysis(Capsule):
+    """opponent cannot move until he takes damage"""
     def __init__(self, owner):
         Capsule.__init__(self, owner)
         self.name = 'paralysis'
@@ -415,6 +432,10 @@ class Paralysis(Capsule):
         return F_NOFX
 
 class Shell(Capsule):
+    """
+    invicibility as long as no action is performed.
+    activates 'pass' capsule
+    """
     def __init__(self, owner):
         Capsule.__init__(self, owner)
         self.name = 'shell'
