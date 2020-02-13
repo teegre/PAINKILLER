@@ -18,11 +18,13 @@ class Capsule():
         """attach capsule to target."""
         if not self.target: raise Exception(f'{self}: no specified target')
         if not self in self.target.active_c:
+            self.on_attach()
             self.target.attach_capsule(self, high_priority)
     def detach(self):
         """detach capsule from target."""
         if not self.target: raise Exception(f'{self}: no specified target')
         if self in self.target.active_c:
+            self.on_detach()
             self.target.detach_capsule(self)
     def activate(self):
         self.active = True
@@ -35,6 +37,10 @@ class Capsule():
     def on_activate(self):
         pass
     def on_deactivate(self):
+        pass
+    def on_attach(self):
+        pass
+    def on_detach(self):
         pass
     def effect(self, action=None, *args):
         """triggered in Character class' action methods: attack, block and hurt."""
@@ -71,7 +77,7 @@ class Attack(Capsule):
         if not success: hit = F_MISS
         else:
             # normal attack
-            _, hit = self.owner.roll(self.owner.sides, self.owner.strength)
+            _, hit = self.owner.roll(self.owner.sides, self.owner.strength * self.owner.str_mul)
 
         for result in self.owner.capsule_trigger('attack', hit):
             if result not in (F_NOCS, F_NOFX): hit = result
@@ -99,7 +105,7 @@ class Relieve(Capsule):
         if not success: hit = F_MISS
         if success:
             #relieve the pain
-            _, pain = self.owner.roll(self.owner.sides, self.owner.strength)
+            _, pain = self.owner.roll(self.owner.sides, self.owner.strength * self.owner.str_mul)
             hit = pain * self.owner.p_pain // 100
             self.owner.pain = 0
             self.owner.p_pain = 0
@@ -126,7 +132,7 @@ class Shield(Capsule):
         log.write(f'{self.owner} use shield')
         for result in self.owner.capsule_trigger('shield'):
             if self.owner.hp == 0: return F_DEAD
-        _, shield = self.owner.roll(self.owner.sides, self.owner.defense)
+        _, shield = self.owner.roll(self.owner.sides, self.owner.defense * self.owner.def_mul)
         self.owner.shield += shield
         log.write(f'{self.owner} +{shield} shield')
         return shield
@@ -522,6 +528,39 @@ class Sacrifice(Capsule):
             target.hurt(self.owner, target.hp + target.shield)
         return F_NOFX
 
+class Steroids(Capsule):
+    """gain strength"""
+    def __init__(self, owner):
+        Capsule.__init__(self, owner)
+        self.name = 'steroids'
+        self.description = 'more strength'
+        self.d_target = 'self'
+        self.value = 1
+        self.str_mul = self.owner.str_mul
+    def use(self, target):
+        log.write(f'{self.owner}→{target}: {self.owner} use {self}')
+        self.target = self.owner
+        self.attach()
+        self.owner.str_mul += self.value
+        log.write(f'{self.owner} is +{self.value} stronger!')
+        self.deactivate()
+        return F_NOFX
+    def upgrade(self):
+        self.value += 1
+    def on_detach(self):
+        self.owner.str_mul = self.str_mul
+        log.write(f'{self.owner}: {self} effect comes to an end.')
+
+class Escape(Capsule):
+    """allow escaping from a fight"""
+    def __init__(self, owner):
+        Capsule.__init__(self, owner)
+        self.name = 'escape'
+        self.description = 'run away'
+        self.d_target = 'self'
+    def use(self, target):
+        return F_ESCP
+
 capsules_dict = {
         #name         #object
         'attack':     Attack,
@@ -543,5 +582,7 @@ capsules_dict = {
         'pass':       Pass,
         'morphine':   Morphine,
         'sacrifice':  Sacrifice,
+        'steroids':   Steroids,
+        'escape':     Escape,
 }
 

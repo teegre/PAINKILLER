@@ -10,6 +10,7 @@ F_DEAD = -2
 F_NOFX = -3
 F_NOPN = -4
 F_NOCS = -5
+F_ESCP = -6
 
 # seed generator
 def seed_gen(s=None):
@@ -27,8 +28,8 @@ def seed_gen(s=None):
     seed(s)
     return s
 
-SEED = seed_gen()
-#SEED = seed_gen('W85N-B7RJ')
+#SEED = seed_gen()
+SEED = seed_gen('J38J-V8NF')
 log = Log(SEED, add_timestamp=False)
 log.clear()
 log.write(f'SEED: {SEED}')

@@ -2,6 +2,7 @@
 # ⚀ ⚁ ⚂ ⚃ ⚄ ⚅
 # ─┌┐│└┘
 import random
+from copy import deepcopy
 from time import sleep
 import sys
 from common import  *
@@ -42,6 +43,10 @@ class Enemy(Character):
             log.write(f'{self} cannot move')
             return None, F_NOCS
 
+        if self.type == 'boss' and (self.maxhp - self.hp >= player.maxhp):
+            result = self.use_capsule('escape')
+            return 'escape', result
+
         if self.is_in_pain and self.can_kill(player):
             result = self.use_capsule('relieve', player)
             return 'relieve', result
@@ -54,6 +59,7 @@ class Enemy(Character):
         else: target = player
         result = self.use_capsule(capsname, target)
         return capsname, result
+
     def upgrade(self):
         #self.level += 1
         self.maxhp += self.sides * 4
@@ -67,15 +73,14 @@ class Enemy(Character):
         self.shield = 0
         self.damage_taken = 0
         self.damage_done = 0
-        self.detach_all_capsules()
-        self.drop_all_capsules(but=('attack', 'shield', 'relieve', 'timebomb'))
+        self.detach_capsules()
+        self.drop_capsules(but=('attack', 'shield', 'relieve', 'timebomb', 'escape'))
         self.deactivate_capsule('relieve')
-
-class Boss(Enemy):
-    pass
+        if self.type == 'boss': self.deactivate_capsule('escape')
 
 player = Character(name='PLAYER', hp=100, strength=2, agility=2)
-enemy = Enemy(name='ENEMY', hp=0, level=1, strength=0, defense=0)
+enemy = Enemy(name='ENEMY', ttype='enemy', hp=0, level=1, strength=0, defense=0)
+boss = None
 player.add_capsule('attack', 'shield', 'relieve')
 enemy.add_capsule('attack', 'shield', 'relieve')
 
@@ -88,12 +93,12 @@ except (KeyboardInterrupt, EOFError):
 
 fight = 1
 
-capsules = [c for c in capsules_dict.keys() if c not in ('attack', 'shield', 'relieve', 'pass')]
+capsules = [c for c in capsules_dict.keys() if c not in ('attack', 'shield', 'relieve', 'pass', 'escape')]
 
 while player.hp > 0:
     turn = 1
     played = 0
-    player.detach_all_capsules()
+    player.detach_capsules()
     capsule = capsules[random.randint(0, len(capsules) -1)]
     player.add_capsule(capsule)
     capsdesc = player.get_caps_desc(capsule)
@@ -101,7 +106,20 @@ while player.hp > 0:
     print(f'** you got a capsule → {capsule}: {capsdesc} **')
     sleep(3)
     enemy.upgrade()
-    enemy.activate_capsules(but=('relieve',))
+    enemy_copy = deepcopy(enemy)
+    if not boss:
+        boss = Enemy(name='CIPAATL', ttype='boss', hp=9999)
+        boss.add_capsule('attack', 'shield', 'relieve', 'leech', 'escape')
+    else:
+        boss.level = player.level + 1
+        boss.strength = player.strength + 1
+        boss.defense = player.defense + 1
+        boss.agility = player.agility
+    if (player.strength * player.sides % (18 + player.sides)) == 0:
+        print(boss.name, 'COMING!')
+        sleep(2)
+        enemy = boss
+    enemy.activate_capsules(but=('relieve', 'escape'))
     player.activate_capsules(but=('relieve',))
     player.shield = 0
     try:
@@ -139,7 +157,9 @@ while player.hp > 0:
                 else: target = enemy
                 result = player.use_capsule(capsname, target)
                 print(f'{player} uses {capsname}!')
-                if capsname == 'attack':
+                if result == F_DEAD:
+                    print(f'{enamy} is dead')
+                elif capsname == 'attack':
                     if result == F_MISS:
                         print(f'{player} miss...')
                     elif result != F_NOFX:
@@ -164,7 +184,12 @@ while player.hp > 0:
                     print(f'{enemy.name} cannot move!')
                 else:
                     print(f'{enemy.name} uses {capsname}')
-                    if capsname == 'attack':
+                    if result == F_ESCP:
+                        print(f'{enemy} escaped!')
+                        sleep(2)
+                        enemy = enemy_copy
+                        break
+                    elif capsname == 'attack':
                         if result == F_MISS:
                             print(f'{enemy.name} misses...')
                         else:
