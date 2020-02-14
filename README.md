@@ -59,7 +59,7 @@ En voici une liste exhaustive :
 - **Calmant** → apaise la douleur de l'adversaire (1 fois par combat). OK
 - **Morphine** → rend l'adversaire insensible à la douleur de la prochaine attaque (réutilisable).
 - **Furie** → augmente la jauge de douleur de 200% (ou 100% si la capsule Berserk est détenue par le joueur) (1 fois par combat). OK
-- **Miroir** → retourne l'attaque de l'adversaire (1 fois par combat). OK
+- **Miroir** → retourne l'attaque de l'adversaire (réutilisable). OK
 - **Mur** → bloque la prochaine attaque (réutilisable). OK
 - **Démolition** → casse l'armure de l'adversaire et inflige une attaque normale (réutilisable). OK
 - **Paralysie** → l'adversaire est immobilisé jusqu'à ce qu'il subisse des dégats (réutilisable). OK
@@ -72,6 +72,8 @@ En voici une liste exhaustive :
 - **Charité** → le joueur offre une partie de ses PV, apaise la douleur de l'adversaire et augmente la sienne. OK
 - **Carapace** → le joueur est invincible tant qu'il n'attaque pas (octroie l'ajout d'une capsule supplémentaire **Passe**).
 - **Passe** → le joueur peut passer son tour (action contenue dans la capsule **Carapace**, ne peut être vendue séparément). OK
+- **Stéroïdes → la force est démultipliée (améliorable) (1 fois par combat). OK
+- **Fuite** → donne la poss
 
 ### 3 Statistiques et valeurs par défaut
 
