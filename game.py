@@ -5,9 +5,8 @@ import random
 from copy import deepcopy
 from time import sleep
 import sys
-from common import  *
-from character import *
-from capsule import *
+from common import *
+from character import Character, CAPSULES
 
 def choose(text, *choices, default=0):
     keywords = []
@@ -80,22 +79,28 @@ class Enemy(Character):
 
 player = Character(name='PLAYER', hp=100, strength=2, agility=2)
 enemy = Enemy(name='ENEMY', ttype='enemy', hp=0, level=1, strength=0, defense=0)
-boss = None
+boss = Enemy(name='CIPAATL', ttype='boss', hp=9999)
 player.add_capsule('attack', 'shield', 'relieve')
 enemy.add_capsule('attack', 'shield', 'relieve')
+boss.add_capsule('attack', 'shield', 'relieve', 'poison', 'escape')
+boss.add_immunity('poison', 'sacrifice')
 
 print('\x1b[2J\x1b[H')
 print(f'-- PAINKILLER (dev) -- {SEED}')
 try:
     choose('hit enter to start', 's')
 except (KeyboardInterrupt, EOFError):
+    print('\nfarewell!')
     sys.exit()
 
 fight = 1
 
-capsules = [c for c in capsules_dict.keys() if c not in ('attack', 'shield', 'relieve', 'pass', 'escape')]
+capsules = [c for c in CAPSULES.keys() if c not in ('attack', 'shield', 'relieve', 'pass', 'escape')]
 
-while player.hp > 0:
+showup = True
+encounter = 0
+
+while player.hp > 0 and boss.hp > 0:
     turn = 1
     played = 0
     player.detach_capsules()
@@ -107,18 +112,21 @@ while player.hp > 0:
     sleep(3)
     enemy.upgrade()
     enemy_copy = deepcopy(enemy)
-    if not boss:
-        boss = Enemy(name='CIPAATL', ttype='boss', hp=9999)
-        boss.add_capsule('attack', 'shield', 'relieve', 'leech', 'escape')
-    else:
-        boss.level = player.level + 1
-        boss.strength = player.strength + 1
-        boss.defense = player.defense + 1
-        boss.agility = player.agility
-    if (player.strength * player.sides % (18 + player.sides)) == 0:
+    boss.level = player.level + 1
+    boss.strength = player.strength + 1
+    boss.defense = player.defense + 1
+    boss.agility = player.agility
+    poison = boss.get_capsule('poison')
+    if poison != F_NOCS: poison.upgrade()
+    boss.deactivate_capsule('escape')
+    if player.strength % 5 == 0 and showup:
         print(boss.name, 'COMING!')
         sleep(2)
         enemy = boss
+        showup = False
+        if encounter == 1:
+            boss.drop_capsule('poison')
+        encounter += 1
     enemy.activate_capsules(but=('relieve', 'escape'))
     player.activate_capsules(but=('relieve',))
     player.shield = 0
@@ -158,7 +166,7 @@ while player.hp > 0:
                 result = player.use_capsule(capsname, target)
                 print(f'{player} uses {capsname}!')
                 if result == F_DEAD:
-                    print(f'{enamy} is dead')
+                    print(f'{enemy} is dead')
                 elif capsname == 'attack':
                     if result == F_MISS:
                         print(f'{player} miss...')
@@ -171,13 +179,15 @@ while player.hp > 0:
                         print(f'{player} miss...')
                     elif result == F_NOFX:
                         print(f'{player} ok')
+                    elif result == F_IMMU:
+                        print(f'{target.name} is immune to {capsname}')
                     else:
                         print(f'{player} does {result} damage!')
                 sleep(1)
                 toggle = 1
                 played += 1
             else:
-                print('ENEMY TURN')
+                print(f'{enemy} turn')
                 sleep(1)
                 capsname, result = enemy.action(player)
                 if capsname is None:
@@ -219,6 +229,18 @@ while player.hp > 0:
         if player.hp > 0:
             print('>> victory achieved <<')
             sleep(3)
+            if encounter == 1 and enemy == boss:
+                print(f'{boss} says: you did well so far...')
+                sleep(1)
+                print(f'{boss} says: I grant you poison immunity!')
+                sleep(1)
+                print(f'{boss} says: try to stay alive until our next encounter...')
+                sleep(1)
+                player.add_immunity('poison')
+                print('you are now immune to poison!')
+                sleep(1)
+                player.hp = player.maxhp
+                print('and you are fully healed.')
             if (enemy.strength % 5) == 0:
                 player.levelup()
                 print(f'** level up **')
@@ -244,6 +266,10 @@ while player.hp > 0:
                 elif action == 2:
                     print('damage up')
                     player.strength += 1
+                    showup = True
+                    if encounter == 1:
+                        boss.drop_capsule('poison')
+                        boss.add_capsule('fury')
                 elif action == 3:
                     print('shield up')
                     player.defense += 1
@@ -266,3 +292,4 @@ print(f'SEED: {SEED}')
 print(f'total damage taken: {player.damage_taken}')
 print(f'damage done: {player.damage_done}')
 print('** GAME OVER **')
+

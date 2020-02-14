@@ -148,6 +148,8 @@ class Poison(Capsule):
         self.efficiency = 1 # dice count
         self.value = 0
     def use(self, target):
+        if target.is_immune(self.name):
+            return F_IMMU
         self.target = target
         self.value += self.owner.roll(self.owner.sides, self.efficiency)[1]
         self.attach()
@@ -221,6 +223,7 @@ class Mirror(Capsule):
             log.write(f'{self.owner} returns {attacker}\'s attack!')
             attacker.hurt(attacker, hit)
             self.detach()
+            self.active = True
             return F_MISS
         else: return F_NOFX
 
@@ -388,6 +391,8 @@ class Leech(Capsule):
         self.description = 'drain life'
         self.d_target = 'other'
     def use(self, target):
+        if target.is_immune(self.name):
+            return F_IMMU
         self.target = target
         log.write(f'{self.owner}→{self.target}: {self.owner} use {self}')
         self.attach()
@@ -417,7 +422,7 @@ class Charity(Capsule):
         Capsule.__init__(self, owner)
         self.name = 'charity'
         self.description = 'be nice!'
-        self.d_target = 'self'
+        self.d_target = 'other'
     def use(self, target):
         heal = self.owner.maxhp * self.owner.self_healing // 100
         self.owner.hurt(self.owner, heal)
@@ -435,6 +440,8 @@ class Paralysis(Capsule):
         self.description = 'nothing to do'
         self.d_target = 'other'
     def use(self, target):
+        if target.is_immune(self.name):
+            return F_IMMU
         self.target = target
         log.write(f'{self.owner}→{self.target}: {self.owner} use {self}')
         self.attach()
@@ -499,6 +506,8 @@ class Morphine(Capsule):
         self.description = 'did you hit me?'
         self.d_target = 'other'
     def use(self, target):
+        if target.is_immune(self.name):
+            return F_IMMU
         log.write(f'{self.owner}→{self.target}: {self.owner} use {self}')
         self.target = target
         self.attach()
@@ -520,6 +529,8 @@ class Sacrifice(Capsule):
         self.description = 'last chance.'
         self.d_target = 'other'
     def use(self, target):
+        if target.is_immune(self.name):
+            return F_IMMU
         log.write(f'{self.owner}→{target}: {self.owner} use {self}')
         self.owner.hurt(self.owner, self.owner.hp + self.owner.shield - 1)
         if target.is_capsule_attached('leech'):
@@ -558,8 +569,17 @@ class Escape(Capsule):
         self.name = 'escape'
         self.description = 'run away'
         self.d_target = 'self'
+        self.active = False
     def use(self, target):
         return F_ESCP
+
+class SpikeShield(Capsule):
+    """opponent takes damage when breaking shield"""
+    pass
+
+class ShieldAttack(Capsule):
+    """normal attack + shield"""
+    pass
 
 capsules_dict = {
         #name         #object
