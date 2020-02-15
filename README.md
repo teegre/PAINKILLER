@@ -2,7 +2,7 @@
 
 ## Description
 **PAINKILLER 101** est un jeu de combat au tour par tour dont tous les aspects sont gérés par des dés.  
-Le but du jeu est de vaincre **Nemesis**, un boss surpuissant qui n'existe pas encore (lol).
+Le but du jeu est de vaincre **CIPAATL**, un boss surpuissant.
 
 ## 1. Combats
 
@@ -23,6 +23,10 @@ Lorsque le niveau de *douleur* atteint les 100%, il est possible de la *libérer
 Cette attaque permet également de récupérer 10% de ses PV max (auto-guérison).    
 Mais attention ! La déclencher peut faire augmenter drastiquement la jauge de *douleur* de l'adversaire, **la *douleur* pouvant être accumulée bien au-delà de 100%**.  
 A utiliser avec précaution donc...
+
+Le **boss** se montrera si le joueur est assez puissant pour l'affronter.
+
+De temps en temps l
 
 ### 1.3 Fin du combat
 
@@ -45,6 +49,12 @@ Tous les 5 combats gagnés, le joueur gagne un niveau supplémentaire :
 - auto-guérison +5%
 - 1 face supplémentaire pour tous les dés
 - +1 dé pour la capsule *poison* si elle est en sa possession
+
+### 1.4 Fin du jeu
+
+Le jeu se termine lorsque les PV du joueur atteignent 0 ou si le joueur réussi à vaincre le boss.
+
+Il est possible de rejouer la partie précédente si le joueur a été tué.
 
 
 ## 2. Capsules
@@ -72,8 +82,9 @@ En voici une liste exhaustive :
 - **Charité** → le joueur offre une partie de ses PV, apaise la douleur de l'adversaire et augmente la sienne. OK
 - **Carapace** → le joueur est invincible tant qu'il n'attaque pas (octroie l'ajout d'une capsule supplémentaire **Passe**).
 - **Passe** → le joueur peut passer son tour (action contenue dans la capsule **Carapace**, ne peut être vendue séparément). OK
-- **Stéroïdes → la force est démultipliée (améliorable) (1 fois par combat). OK
-- **Fuite** → donne la poss
+- **Stéroïdes** → la force est démultipliée (améliorable) (1 fois par combat). OK
+- **Fuite** → donne la possibilité de fuir un combat. OK
+- **Prudence** → la valeur de l'attaque portée est ajoutée au bouclier. OK
 
 ### 3 Statistiques et valeurs par défaut
 

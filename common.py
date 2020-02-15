@@ -30,6 +30,7 @@ def seed_gen(s=None):
     return s
 
 SEED = seed_gen()
+#SEED = seed_gen('YCLK-103O')
 log = Log(SEED, add_timestamp=False)
 log.clear()
 log.write(f'SEED: {SEED}')

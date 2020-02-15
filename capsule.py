@@ -233,23 +233,23 @@ class Fury(Capsule):
         Capsule.__init__(self, owner)
         self.name = 'fury'
         self.d_target = 'self'
-        self.description = 'it\'s gonna hurt... way more!'
+        self.description = 'it\'s gonna hurt...'
         self.icon_path = 'sprites/fury.gif'
     def use(self, target):
         self.target = self.owner
         self.attach()
         self.active = False
         log.write(f'{self.owner}→{self.target}: {self.owner} use {self.name}!')
-    def effect(self, action, *args):
-        if action == 'hurt':
-            if self.owner.has_capsule('berserk'): mult = 100
-            else: mult = 200
-            if self.owner.pain == 0: self.owner.pain = self.owner.maxhp * mult // 100
-            else: self.owner.pain += self.owner.maxhp * mult // 100
+    def effect(self, action, attacker, hit):
+        if action == 'hurt' and hit > 0:
+            if self.owner.has_capsule('berserk'): mul = 100
+            else: mul = 200
+            if self.owner.pain == 0: self.owner.pain = self.owner.maxhp * mul // 100
+            else: self.owner.pain += self.owner.maxhp * mul // 100
             log.write(f'{self.owner} get furious!')
             self.detach()
             return 0
-        else: return -3
+        else: return F_NOFX
 
 class Wreckage(Capsule):
     """break opponent's shield and perform normal attack"""
@@ -261,8 +261,10 @@ class Wreckage(Capsule):
         self.icon_path = None
     def use(self, target):
         log.write(f'{self.owner} use {self}!')
-        target.shield = 0
-        return self.owner.use_capsule('attack', target)
+        if self.owner.lucky(target):
+            target.shield = 0
+            return self.owner.use_capsule('attack', target)
+        else: return F_MISS
 
 class PainKiller(Capsule):
     """reduce opponent's pain to zero"""
@@ -336,7 +338,7 @@ class Berserk(Capsule):
     def use(self, target):
         self.target = target
         log.write(f'{self.owner}→{target}: {self.owner} use {self}')
-        self.attach(True)
+        self.attach()
         self.active = False
     def effect(self, action, hit=None, *args):
         if action == 'attack':
@@ -551,7 +553,7 @@ class Steroids(Capsule):
     def use(self, target):
         log.write(f'{self.owner}→{target}: {self.owner} use {self}')
         self.target = self.owner
-        self.attach()
+        self.attach(high_priority=True)
         self.owner.str_mul += self.value
         log.write(f'{self.owner} is +{self.value} stronger!')
         self.deactivate()
@@ -568,18 +570,36 @@ class Escape(Capsule):
         Capsule.__init__(self, owner)
         self.name = 'escape'
         self.description = 'run away'
-        self.d_target = 'self'
+        self.d_target = 'other'
         self.active = False
     def use(self, target):
-        return F_ESCP
+        log.write(f'{self.owner} tries to escape...')
+        if self.owner.lucky(target): return F_ESCP
+        else: return F_MISS
 
 class SpikeShield(Capsule):
     """opponent takes damage when breaking shield"""
     pass
 
-class ShieldAttack(Capsule):
-    """normal attack + shield"""
+class Steal(Capsule):
+    """steal capsule from opponent"""
     pass
+
+class Prudence(Capsule):
+    """normal attack + shield"""
+    def __init__(self, owner):
+        Capsule.__init__(self, owner)
+        self.name = 'prudence'
+        self.description = 'the best form of defence is attack'
+        self.d_target = 'other'
+    def use(self, target):
+        log.write(f'{self.owner} uses {self}')
+        result = self.owner.use_capsule('attack', target)
+        if result < 0: return F_NOFX
+        self.owner.shield += result
+        log.write(f'{self.owner} gains +{result} shield')
+        return result
+
 
 capsules_dict = {
         #name         #object
@@ -604,5 +624,6 @@ capsules_dict = {
         'sacrifice':  Sacrifice,
         'steroids':   Steroids,
         'escape':     Escape,
+        'prudence':   Prudence,
 }
 

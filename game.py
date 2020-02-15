@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 # ⚀ ⚁ ⚂ ⚃ ⚄ ⚅
-# ─┌┐│└┘
+
 import random
 from copy import deepcopy
 from time import sleep
@@ -28,7 +28,10 @@ def choose(text, *choices, default=0):
     answer = ''
 
     while answer not in keywords and answer not in [char[0] for char in keywords]:
-        answer = input(f'{string} ')
+        try:
+            answer = input(f'{string} ')
+        except UnicodeDecodeError:
+            continue
         if not answer: return default
         if answer.lower() in [char[0] for char in keywords]:
             for key in keywords:
@@ -43,7 +46,7 @@ class Enemy(Character):
             return None, F_NOCS
 
         if self.type == 'boss' and (self.maxhp - self.hp >= player.maxhp):
-            result = self.use_capsule('escape')
+            result = self.use_capsule('escape', player)
             return 'escape', result
 
         if self.is_in_pain and self.can_kill(player):
@@ -103,7 +106,6 @@ encounter = 0
 while player.hp > 0 and boss.hp > 0:
     turn = 1
     played = 0
-    player.detach_capsules()
     capsule = capsules[random.randint(0, len(capsules) -1)]
     player.add_capsule(capsule)
     capsdesc = player.get_caps_desc(capsule)
@@ -219,6 +221,8 @@ while player.hp > 0 and boss.hp > 0:
                 toggle = 0
                 played += 1
 
+        player.detach_capsules()
+        enemy.detach_capsules()
         print('\x1b[2J\x1b[H')
         print(player.stats[0])
         print(player.stats[1])

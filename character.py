@@ -54,8 +54,8 @@ class Character():
         log.write(f'{self} takes a chance...')
         S = T = 0
         while S == T:
-            S = self.roll(self.sides, n=2)[1] + self.roll(n=2)[1]
-            T = target.roll(target.sides, n=2)[1] + target.roll(n=2)[1]
+            S = self.roll(self.sides, n=2)[1] + self.roll(n=1)[1]
+            T = target.roll(target.sides, n=2)[1] + target.roll(n=1)[1]
             if S == T: log.write('** draw **')
         return S > T
 
@@ -275,17 +275,17 @@ class Character():
         if hit <= 0: log.write(f'{self} doesn\'t hurt')
         if hit <= 0: return F_NOFX
 
-        # attack totally blocked
-        if self.shield == hit: self.shield = 0; hit = 0
-        elif self.shield > hit: self.shield -= hit; hit = 0
-        # attack partially blocked
-        elif self.shield < hit: hit -= self.shield; self.shield = 0
-
         result = F_NOCS
 
         for result in self.capsule_trigger('hurt', attacker, hit):
             if result == F_MISS: hit = 0
             elif result > 0: hit = result
+
+        # attack totally blocked
+        if self.shield == hit: self.shield = 0; hit = 0
+        elif self.shield > hit: self.shield -= hit; hit = 0
+        # attack partially blocked
+        elif self.shield < hit: hit -= self.shield; self.shield = 0
 
         # actual damage taken
         self.hp -= hit
@@ -325,6 +325,12 @@ class Character():
         self.p_pain = 0
         for capsule in self.capsules.values():
             capsule.upgrade()
+
+    def reset(self):
+        log.write(f'{self} reset')
+        self.hp = hp
+        self.detach_capsules()
+        self.drop_capsules()
 
     def __repr__(self):
         return self.name
