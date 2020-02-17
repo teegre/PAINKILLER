@@ -25,12 +25,11 @@ class Poison(Capsule):
         if self.owner.hp == 0:
             self.value = 0
             return 0
-        if self.target and self.value and action in ('attack', 'shield'):
+        if self.target and self.value:
             log.write(f'{self.target} get {self.value} poison damage!')
-            shield = self.target.shield
-            self.target.shield = 0
-            self.target.hurt(self.owner, self.value)
-            self.target.shield = shield
+            self.target.hp -= self.value
+            self.target.damage_taken += self.value
+            self.owner.damage_done += self.value
             self.value -= 1
             if self.value <= 0 or self.target.hp == 0:
                 self.detach()

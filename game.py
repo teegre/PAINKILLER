@@ -129,6 +129,7 @@ while player.hp > 0 and boss.hp > 0:
         if encounter == 1:
             boss.drop_capsule('poison')
         encounter += 1
+        boss.hp = boss.maxhp
     enemy.activate_capsules(but=('relieve', 'escape'))
     player.activate_capsules(but=('relieve',))
     player.shield = 0

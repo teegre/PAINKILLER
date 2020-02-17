@@ -30,7 +30,7 @@ class Embrace(Capsule):
         self.owner.hp = self.owner.maxhp
         log.write(f'{self.owner} is healed!')
         if self.owner.is_capsule_attached('poison'):
-            capsule = self.owner.get_capsule('poison')
+            capsule = self.owner.get_active_capsule('poison')
             capsule.detach()
             log.write(f'{self.owner}: poison cured')
         self.active = False

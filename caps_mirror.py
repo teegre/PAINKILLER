@@ -16,6 +16,7 @@ class Mirror(Capsule):
         self.attach(True)
         self.active = False
         log.write(f'{self.owner}→{self.target}: {self.owner} use {self.name}!')
+        return F_ATTX
     def effect(self, action, attacker=None, hit=None):
         if action == 'hurt':
             log.write(f'{self.owner} returns {attacker}\'s attack!')

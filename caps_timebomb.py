@@ -26,7 +26,7 @@ class TimeBomb(Capsule):
         self.countdown -= 1
         if self.countdown == 0:
             hit = self.owner.hp
-            target.hurt(self.owner, hit)
+            self.target.hurt(self.owner, hit)
             self.owner.shield = 0
             self.owner.hurt(self.owner, hit)
             return hit

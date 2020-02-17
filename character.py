@@ -1,4 +1,5 @@
 from common import *
+from copy import deepcopy
 from capsules import CAPSULES
 from random import randint
 
@@ -161,6 +162,12 @@ class Character():
             log.write(f'{self}: cannot get → no such capsule: {capsname}')
             return F_NOCS
 
+    def get_active_capsule(self, capsname):
+        for capsule in self.active_c:
+            if capsule.name == capsname:
+                return capsule
+        return F_NOCS
+
     def heal(self, value=None):
         if self.hp < self.maxhp and self.hp > 0:
             if value is not None: heal = value
@@ -236,9 +243,11 @@ class Character():
 
     def drop_capsules(self, but=()):
         """drop all capsules"""
-        for capsname in self.capsules.keys():
+        capsules = deepcopy(self.capsules)
+        for capsname in capsules.keys():
             if capsname not in but:
                 self.drop_capsule(capsname)
+        del capsules
 
 
     def attach_capsule(self, capsule, high_priority=False):
@@ -254,7 +263,7 @@ class Character():
 
     def detach_capsules(self):
         """detach all capsules"""
-        for capsule in self.active_c:
+        for capsule in reversed(self.active_c):
             capsule.detach()
             capsule.reset()
         self.active_c.clear()
