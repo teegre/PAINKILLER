@@ -1,6 +1,6 @@
-from random import randint
 from common import *
-from capsule import capsules_dict as CAPSULES
+from capsules import CAPSULES
+from random import randint
 
 class Character():
     """base class for game characters."""
@@ -161,12 +161,6 @@ class Character():
             log.write(f'{self}: cannot get → no such capsule: {capsname}')
             return F_NOCS
 
-    def ease_the_pain(self, target):
-        capsule = self.get_capsule('attack')
-        if capsule:
-            return capsule.use(target, ease=True)
-        else: return F_NOFX
-
     def heal(self, value=None):
         if self.hp < self.maxhp and self.hp > 0:
             if value is not None: heal = value
@@ -207,7 +201,7 @@ class Character():
                 nocs.append(capsname)
                 log.write(f'{self}: cannot add → no such capsule: {capsname}')
                 continue
-        if nocs: return F_NOCS
+        if nocs: return len(nocs)
         else: return 0
 
     def use_capsule(self, capsname, target=None):
@@ -237,24 +231,29 @@ class Character():
             log.write(f'{self} drops {capsname}')
             capsule = self.capsules.pop(capsname)
             del capsule
+            return 0
+        else: return 1
 
     def drop_capsules(self, but=()):
+        """drop all capsules"""
         for capsname in self.capsules.keys():
             if capsname not in but:
                 self.drop_capsule(capsname)
 
 
     def attach_capsule(self, capsule, high_priority=False):
-        """attach a capsule to the character."""
+        """attach a capsule to character"""
         if high_priority: self.active_c.insert(0, capsule)
         else: self.active_c.append(capsule)
 
     def detach_capsule(self, capsule):
+        """detach a capsule from character"""
         self.active_c.remove(capsule)
         log.write(f'{self}: {capsule.name} is no longer active.')
         capsule.reset()
 
     def detach_capsules(self):
+        """detach all capsules"""
         for capsule in self.active_c:
             capsule.detach()
             capsule.reset()

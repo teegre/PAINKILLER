@@ -29,8 +29,8 @@ def seed_gen(s=None):
     seed(s)
     return s
 
-SEED = seed_gen()
-#SEED = seed_gen('YCLK-103O')
+#SEED = seed_gen()
+SEED = seed_gen('GLPR-M5E0')
 log = Log(SEED, add_timestamp=False)
 log.clear()
 log.write(f'SEED: {SEED}')

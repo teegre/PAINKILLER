@@ -167,8 +167,9 @@ while player.hp > 0 and boss.hp > 0:
                 else: target = enemy
                 result = player.use_capsule(capsname, target)
                 print(f'{player} uses {capsname}!')
-                if result == F_DEAD:
-                    print(f'{enemy} is dead')
+                if player.hp == 0:
+                    print(f'{player} is dead...')
+                    continue
                 elif capsname == 'attack':
                     if result == F_MISS:
                         print(f'{player} miss...')

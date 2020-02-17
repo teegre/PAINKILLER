@@ -86,15 +86,113 @@ En voici une liste exhaustive :
 - **Fuite** → donne la possibilité de fuir un combat. OK
 - **Prudence** → la valeur de l'attaque portée est ajoutée au bouclier. OK
 
-### 3 Statistiques et valeurs par défaut
+## 3. Statistiques et valeurs par défaut
 
 |Caractéristique | Valeur
 |:---------------|:------
+|PV              |100
+|PV max          |100
 |Force           |2x6
 |Défense         |1x6
 |Agilité         |2
 |Auto-guérison   |10% des PV max
 
+
+## 4. Python Classes
+
+There are two classes in this game: Character and Capsule.  
+Basically, a character is given some capsules that he can use.  
+Depending on the capsule type, it can be used for immediate effect, like *attack* and *shield*  
+or it can be attached so it will be effective only when the character or his opponent takes action (ie. *poison*, *wall*).  
+The latter are called *active capsules*
+
+### 4.1 CHARACTER
+
+#### 4.1.1 Properties
+
+|Property         |Description               |Type    |Default value
+|:----------------|:------------------------|:-------|:------------
+|name             |character's name         |str     |None
+|type             |character type (optional)|str     |None
+|level            |character's level: determine dice side count (level + 5 = sides) |int |1
+|maxhp            |max health points |int |100
+|hp               |health point|int |100
+|strength         |dice count |int | 1
+|defense          |dice count |int | 1
+|agility          |ability to succeed an attack |int |1
+|self_healing     |ability to heal after performing a *relieve* attack |int |10
+|immunity         |capsules without effect on the character |list | []
+|str_mul          |strength multiplier |int |1
+|def_mul          |defense multiplier |int |1
+|shield           |actual shield value |int |0
+|pain             |actual pain value |int |0
+|p_pain           |actual pain percentage |int |0
+|capsules         |owned capsules |list |[]
+|active_c         |active capsules |list |[]
+|damage_taken     |total damage taken |int |0
+|damage_done      |total damage done |int |0
+|sides            |dice side count |int |level + 5
+|is_in_pain       |is character in pain? |bool |False
+|actions          |list of available actions |list |[]
+
+#### 4.1.2 Methods
+
+- roll
+- success
+- lucky
+- can_kill
+- is_immune
+- add_immunity
+- activate_capsules
+- activate_capsule
+- deactivate_capsules
+- deactivate_capsule
+- drop_capsules
+- drop_capsule
+- attach_capsule
+- detach_capsules
+- detach_capsule
+- add_capsule
+- use_capsule
+- get_capsule
+- has_capsule
+- is_capsule_active
+- get_caps_df
+- get_caps_desc
+- capsule_trigger
+- heal
+- hurt
+- hpup
+- levelup
+- reset
+
+### 4.3 CAPSULE
+
+#### 4.3.1 Properties
+
+|Property |Description |Type |Default value
+|:-------|:-----------|:-----|:------------
+|name |capsule name |str |capsule
+|description |capsule description|str |this is an empty capsule
+|d_target |default target: can be either self or other|str |empty
+|active |if True, capsule appears in character's action list|bool |True
+|owner |character |Character |None
+|target |character |Character| None
+
+#### 4.3.2 Methods
+
+- use
+- attach
+- detach
+- activate
+- deactivate
+- on_activate
+- on_deactivate
+- on_attach
+- on_detach
+- effect
+- upgrade
+- reset
 
 ## Zones intermédiaires
 ???
