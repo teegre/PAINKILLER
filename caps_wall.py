@@ -21,6 +21,6 @@ class Wall(Capsule):
             log.write(f'{self.target} cancel opponent\'s attack')
             self.detach()
             self.active = True
-            return F_MISS
+            return F_NODM
         else: return F_NOFX
 

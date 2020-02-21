@@ -17,6 +17,8 @@ class Shield(Capsule):
         for result in self.owner.capsule_trigger('shield'):
             if self.owner.hp == 0: return F_DEAD
         _, shield = self.owner.roll(self.owner.sides, self.owner.defense * self.owner.def_mul)
+        if shield == self.owner.defense * self.owner.sides * self.owner.def_mul:
+            shield *= 2
         self.owner.shield += shield
         log.write(f'{self.owner} +{shield} shield')
         return shield

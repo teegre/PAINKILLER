@@ -15,11 +15,10 @@ class Empathy(Capsule):
         self.attach()
         log.write(f'{self.owner}→{self.target}: {self.owner} use {self.name}')
         self.active = False
-        return F_NOFX
+        return F_ATTX
     def effect(self, action, attacker=None, hit=None):
         if action == 'hurt':
             log.write(f'{self.owner} feels {self.target}\'s pain...')
-            self.owner.pain += hit // 2
-            self.owner.p_pain = self.owner.pain * 100 // self.owner.hp
+            self.owner.pain += hit
         return F_NOFX
 

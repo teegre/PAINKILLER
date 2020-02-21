@@ -23,9 +23,11 @@ class Relieve(Capsule):
         if success:
             #relieve the pain
             _, pain = self.owner.roll(self.owner.sides, self.owner.strength * self.owner.str_mul)
+            if pain == self.owner.sides * self.owner.strength * self.owner.str_mul:
+                pain *= 2
+                log.write(f'{self.owner} LUCKY HIT! ({pain})')
             hit = pain * self.owner.p_pain // 100
             self.owner.pain = 0
-            self.owner.p_pain = 0
             self.owner.heal()
 
         for result in self.owner.capsule_trigger('attack', hit):

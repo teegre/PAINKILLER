@@ -25,7 +25,7 @@ class Attack(Capsule):
             _, hit = self.owner.roll(self.owner.sides, self.owner.strength * self.owner.str_mul)
             if hit == self.owner.sides * self.owner.strength * self.owner.str_mul:
                 hit *= 2
-                log.write(f'{self.owner} CRITICAL HIT! ({hit})')
+                log.write(f'{self.owner} LUCKY HIT! ({hit})')
 
         for result in self.owner.capsule_trigger('attack', hit):
             if result not in (F_NOCS, F_NOFX): hit = result

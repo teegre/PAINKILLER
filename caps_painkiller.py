@@ -14,7 +14,6 @@ class PainKiller(Capsule):
         log.write(f'{self.owner}→{target}: {self.owner} use {self.name}!')
         if target.pain > 0:
             target.pain = 0
-            target.p_pain = 0
             log.write(f'{target}\'s pain is soothed...')
             self.active = False
         else: self.active = True

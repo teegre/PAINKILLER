@@ -29,7 +29,6 @@ class Leech(Capsule):
                 self.owner.heal(hit)
                 self.owner.pain -= hit
                 if self.owner.pain < 0: self.owner.pain = 0
-                self.owner.p_pain = self.owner.pain * 100 // self.owner.hp
                 return 0
             else: return F_NOFX
         else: return F_NOFX

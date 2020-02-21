@@ -1,7 +1,7 @@
-# PAINKILLER 101
+# RELIEF
 
 ## Description
-**PAINKILLER 101** est un jeu de combat au tour par tour dont tous les aspects sont gérés par des dés.  
+**RELIEF** est un jeu de combat au tour par tour dont tous les aspects sont gérés par des dés.  
 Le but du jeu est de vaincre **CIPAATL**, un boss surpuissant.
 
 ## 1. Combats
@@ -18,15 +18,20 @@ De plus, il obtient une *capsule* aléatoire à chaque début de combat (voir pl
 
 Le joueur dispose au départ des *capsules* *attaque* et *bouclier* et d'une *capsule* aléatoire (cf. 2.).  
 Les combattants n'ont droit qu'à une seule action par tour.
+La force correspondant au nombre de dés (N) et le niveau déterminant le nombre de faces d'un dé (F), la valeur d'un attaque est égale au lancé de N dés à F faces.  
+Si lors du lancé, tous les dés ont une valeur égale à F, alors le résultat est doublé (**attaque chance**).  
+Il en est de même lors de l'utilisation du bouclier.
 Chaque fois que des dégats sont reçus par l'un ou l'autre des protagonistes, leur jauge de *douleur* se remplit.  
 Lorsque le niveau de *douleur* atteint les 100%, il est possible de la *libérer* en effectuant un attaque devastatrice et ainsi de la remettre à zéro.  
-Cette attaque permet également de récupérer 10% de ses PV max (auto-guérison).    
+Cette attaque permet également de récupérer un certain pourcentage de ses PV max égal (auto-guérison).  
+Soit P le pourcentage de douleur, la valeur d'une attaque *libérer* est égale au lancé de N dés à F faces x P
 Mais attention ! La déclencher peut faire augmenter drastiquement la jauge de *douleur* de l'adversaire, **la *douleur* pouvant être accumulée bien au-delà de 100%**.  
-A utiliser avec précaution donc...
+L'adversaire n'hésitera pas à attaquer s'il est sûr de vous tuer.
+A utiliser avec précaution donc...  
+
+A noter que le joueur conserve son niveau de douleur entre les combats, hormis lorsqu'il augmente d'un niveau.
 
 Le **boss** se montrera si le joueur est assez puissant pour l'affronter.
-
-De temps en temps l
 
 ### 1.3 Fin du combat
 
@@ -52,7 +57,7 @@ Tous les 5 combats gagnés, le joueur gagne un niveau supplémentaire :
 
 ### 1.4 Fin du jeu
 
-Le jeu se termine lorsque les PV du joueur atteignent 0 ou si le joueur réussi à vaincre le boss.
+Le jeu se termine lorsque les PV du joueur atteignent 0 ou si le joueur réussit à vaincre le boss.
 
 Il est possible de rejouer la partie précédente si le joueur a été tué.
 
@@ -65,14 +70,14 @@ En voici une liste exhaustive :
 - **Attaque** → attaque normale. OK
 - **Libérer** → attaque spéciale. OK
 - **Bouclier** → défense. OK
-- **Poison** → inflige des dégats qui équivalent au résultat du lancé d'un dé (le nombre de faces est déterminé par le niveau du joueur). A chaque tour la valeur diminue de 1. (cumulable et améliorable) OK
-- **Calmant** → apaise la douleur de l'adversaire (1 fois par combat). OK
+- **Poison** → inflige des dégats de poison dont la valeur maximum est égale la force du joueur x le nombre de faces de ses dés. A chaque tour la valeur diminue de 1. (réutilisable) OK
+- **Calmant** → apaise la douleur de l'adversaire (réutilisable). OK
 - **Morphine** → rend l'adversaire insensible à la douleur de la prochaine attaque (réutilisable).
 - **Furie** → augmente la jauge de douleur de 200% (ou 100% si la capsule Berserk est détenue par le joueur) (1 fois par combat). OK
 - **Miroir** → retourne l'attaque de l'adversaire (réutilisable). OK
 - **Mur** → bloque la prochaine attaque (réutilisable). OK
 - **Démolition** → casse l'armure de l'adversaire et inflige une attaque normale (réutilisable). OK
-- **Paralysie** → l'adversaire est immobilisé jusqu'à ce qu'il subisse des dégats (réutilisable). OK
+- **Paralysie** → l'adversaire est immobilisé jusqu'à ce qu'il subisse des dégats directs (réutilisable). OK
 - **Accolade** → réduit la douleur de l'adversaire à 0 et lui ajoute 10% de ses PV max (1 fois par combat). OK
 - **Empathie** → la jauge de douleur augmente également lorsque le joueur inflige des dégats à l'adversaire. OK
 - **Berserk** → les dégats infligés sont doublés, mais la douleur n'augmente pas (si activé, dure jusqu'à la fin du combat). OK

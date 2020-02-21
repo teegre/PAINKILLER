@@ -18,7 +18,7 @@ class Charity(Capsule):
         heal = self.owner.maxhp * self.owner.self_healing // 100
         self.owner.hurt(self.owner, heal)
         target.heal(heal)
-        target.pain = target.p_pain = 0
+        target.pain = 0
         target.shield = 0
         self.active = False
         return F_NOFX

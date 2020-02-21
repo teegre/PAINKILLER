@@ -23,6 +23,7 @@ class TimeBomb(Capsule):
         self.active = False
         return self.countdown
     def effect(self, action, *args):
+        if action == 'hurt': return F_NOFX
         self.countdown -= 1
         if self.countdown == 0:
             hit = self.owner.hp

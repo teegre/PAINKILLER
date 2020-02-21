@@ -22,7 +22,6 @@ class Character():
         # state
         self.shield = 0 # blocked damage.
         self.pain = 0 # damage taken.
-        self.p_pain = 0 # percentage of damage taken / actual hp.
         # owned capsules
         self.capsules = {}
         # capsules used against character
@@ -64,6 +63,11 @@ class Character():
     def sides(self):
         """dice side count"""
         return self.level + 5
+
+    @property
+    def p_pain(self):
+        if self.hp: return self.pain * 100 // self.hp
+        else: return 0
 
     @property
     def is_in_pain(self):
@@ -286,7 +290,7 @@ class Character():
         result = F_NOCS
 
         for result in self.capsule_trigger('hurt', attacker, hit):
-            if result == F_MISS: hit = 0
+            if result in (F_MISS, F_NODM): hit = 0
             elif result > 0: hit = result
 
         # attack totally blocked
@@ -309,9 +313,7 @@ class Character():
         if result != F_NOPN:
             # increase pain gauge
             self.pain += hit
-            self.p_pain = self.pain * 100 // self.hp
             log.write(f'{self} pain ({self.pain}) is now {self.p_pain}%')
-            #if self.p_pain < 0: self.p_pain = 0
         return hit
 
     def hpup(self, value):
@@ -330,7 +332,6 @@ class Character():
         self.agility += 1
         self.self_healing += 5
         self.pain = 0
-        self.p_pain = 0
         for capsule in self.capsules.values():
             capsule.upgrade()
 

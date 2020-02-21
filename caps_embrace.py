@@ -20,12 +20,10 @@ class Embrace(Capsule):
     def use(self, target):
         log.write(f'{self.owner}→{target}: {self.owner} use {self}')
         target.pain = 0
-        target.p_pain = 0
         target.shield = 0
         log.write(f'{target} pain is relieved...')
         target.heal()
         self.owner.pain = 0
-        self.owner.p_pain = 0
         self.owner.shield = 0
         self.owner.hp = self.owner.maxhp
         log.write(f'{self.owner} is healed!')

@@ -71,12 +71,11 @@ class Enemy(Character):
         if self.defense == 0: self.defense = 1
         self.name = f'ENEMY{self.strength}'
         self.pain = 0
-        self.p_pain = 0
         self.shield = 0
         self.damage_taken = 0
         self.damage_done = 0
         self.detach_capsules()
-        self.drop_capsules(but=('attack', 'shield', 'relieve', 'timebomb', 'escape'))
+        self.drop_capsules(but=('attack', 'shield', 'relieve'))
         self.deactivate_capsule('relieve')
         if self.type == 'boss': self.deactivate_capsule('escape')
 
@@ -98,7 +97,8 @@ except (KeyboardInterrupt, EOFError):
 
 fight = 1
 
-capsules = [c for c in CAPSULES.keys() if c not in ('attack', 'shield', 'relieve', 'pass', 'escape')]
+capsules = [c for c in CAPSULES.keys() if c not in ('attack', 'shield', 'relieve', 'pass', 'escape', 'timebomb')]
+e_capsules = [c for c in CAPSULES.keys() if c not in ('attack', 'shield', 'relieve', 'pass', 'escape', 'sacrifice') ]
 
 showup = True
 encounter = 0
@@ -113,6 +113,8 @@ while player.hp > 0 and boss.hp > 0:
     print(f'** you got a capsule → {capsule}: {capsdesc} **')
     sleep(3)
     enemy.upgrade()
+#    e_capsule = e_capsules[random.randint(0, len(e_capsules) - 1)]
+#    enemy.add_capsule(e_capsule)
     enemy_copy = deepcopy(enemy)
     boss.level = player.level + 1
     boss.strength = player.strength + 1
@@ -160,6 +162,13 @@ while player.hp > 0 and boss.hp > 0:
             print(f'{EKP} {enemy.stats[2]}')
             if toggle == 0:
                 print('your turn')
+
+                if player.actions == F_NOCS:
+                    print(f'{player} cannot move!')
+                    sleep(1)
+                    toggle = 1
+                    played += 1
+                    continue
                 actions, keys = player.actions
                 idx = choose(' '.join(actions), *keys)
                 capsname = actions[idx]
@@ -201,7 +210,6 @@ while player.hp > 0 and boss.hp > 0:
                     if result == F_ESCP:
                         print(f'{enemy} escaped!')
                         sleep(2)
-                        enemy = enemy_copy
                         break
                     elif capsname == 'attack':
                         if result == F_MISS:
@@ -247,6 +255,7 @@ while player.hp > 0 and boss.hp > 0:
                 sleep(1)
                 player.hp = player.maxhp
                 print('and you are fully healed.')
+            if enemy == boss: enemy = enemy_copy
             if (enemy.strength % 5) == 0:
                 player.levelup()
                 print(f'** level up **')

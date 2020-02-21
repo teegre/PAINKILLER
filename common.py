@@ -13,6 +13,7 @@ F_NOCS = -5
 F_ESCP = -6
 F_IMMU = -7
 F_ATTX = -8
+F_NODM = -10
 
 # seed generator
 def seed_gen(s=None):
@@ -31,7 +32,7 @@ def seed_gen(s=None):
     return s
 
 SEED = seed_gen()
-#SEED = seed_gen('JCII-I4SO')
+#SEED = seed_gen('TWGJ-PS8Q')
 log = Log(SEED, add_timestamp=False)
 log.clear()
 log.write(f'SEED: {SEED}')

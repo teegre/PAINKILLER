@@ -6,7 +6,7 @@ from caps_shield     import Shield
 from caps_relieve    import Relieve
 from caps_poison     import Poison
 from caps_wall       import Wall
-from caps_mirror     import Mirror
+from caps_deflector  import Deflector
 from caps_fury       import Fury
 from caps_wreckage   import Wreckage
 from caps_painkiller import PainKiller
@@ -32,7 +32,7 @@ CAPSULES = {
         'relieve':    Relieve,
         'poison':     Poison,
         'wall':       Wall,
-        'mirror':     Mirror,
+        'deflector':  Deflector,
         'fury':       Fury,
         'wreckage':   Wreckage,
         'painkiller': PainKiller,
