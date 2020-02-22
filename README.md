@@ -90,6 +90,8 @@ En voici une liste exhaustive :
 - **Stéroïdes** → la force est démultipliée (améliorable) (1 fois par combat). OK
 - **Fuite** → donne la possibilité de fuir un combat. OK
 - **Prudence** → la valeur de l'attaque portée est ajoutée au bouclier. OK
+- **Régénère**
+- **Endurer** → pas de dégats subis mais la douleur est ressentie (1 fois par combat)
 
 ## 3. Statistiques et valeurs par défaut
 

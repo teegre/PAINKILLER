@@ -24,6 +24,7 @@ from caps_sacrifice  import Sacrifice
 from caps_steroids   import Steroids
 from caps_escape     import Escape
 from caps_prudence   import Prudence
+from caps_endure     import Endure
 
 CAPSULES = {
         #name         #class
@@ -50,5 +51,6 @@ CAPSULES = {
         'steroids':   Steroids,
         'escape':     Escape,
         'prudence':   Prudence,
+        'endure':     Endure,
 }
 
