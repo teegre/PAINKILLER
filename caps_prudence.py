@@ -13,7 +13,7 @@ class Prudence(Capsule):
     def use(self, target):
         log.write(f'{self.owner} uses {self}')
         result = self.owner.use_capsule('attack', target)
-        if result < 0: return F_NOFX
+        if result < 0: return F_MISS
         self.owner.shield += result
         log.write(f'{self.owner} gains +{result} shield')
         return result

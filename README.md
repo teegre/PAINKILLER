@@ -14,7 +14,7 @@ De plus, il obtient une *capsule* aléatoire à chaque début de combat (voir pl
 
 ### 1.2 Déroulement
 
-***Avertissement**: la décision de qui débute le combat est prise aléatoirement ! (1 chance sur 2)*
+**Avertissement**: la décision de qui débute le combat est prise aléatoirement ! (1 chance sur 2)
 
 Le joueur dispose au départ des *capsules* *attaque* et *bouclier* et d'une *capsule* aléatoire (cf. 2.).  
 Les combattants n'ont droit qu'à une seule action par tour.
