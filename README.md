@@ -1,7 +1,9 @@
-# RELIEF
+# PAINKILLER
+
+**This is work in progress**
 
 ## Description
-**RELIEF** est un jeu de combat au tour par tour dont tous les aspects sont gérés par des dés.  
+**PAINKILLER** est un jeu de combat au tour par tour dont tous les aspects sont gérés par des dés.  
 Le but du jeu est de vaincre **CIPAATL**, un boss surpuissant.
 
 ## 1. Combats
